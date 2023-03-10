@@ -4,6 +4,9 @@ from listings.API import views as listings_api_views
 from django.conf import settings
 from django.conf.urls.static import static
 from users.API import views as users_api_views
+from medical_pet_app.API import views as med_api_views
+
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/listings/info/<int:id>/', listings_api_views.PetListingID.as_view()),
@@ -12,6 +15,7 @@ urlpatterns = [
     path('api/listings/delete/<int:id>/', listings_api_views.DeletePets.as_view() ),
     path('api/listings/create/', listings_api_views.CreatePets.as_view() ),
     
+    path('api/listings/medical/<int:id>/', med_api_views.UpdateMed.as_view() ),
     
     path('api/profiles/', users_api_views.ProfileList.as_view() ),
     path('api/user/profile/<int:id>/', users_api_views.UserProfileUpdateView.as_view() ),

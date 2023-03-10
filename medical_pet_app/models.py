@@ -6,7 +6,8 @@ from django.utils import timezone
 # Create your models here.
 class Medical_pet(models.Model):
     pet = models.ForeignKey(to = 'listings.Pet',on_delete=models.CASCADE)
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100,null=True, blank=True,)
+    med_type = models.CharField(max_length=100, null=True, blank=True, default='vaccination')
     dscription = models.TextField(blank=True,null=True)
     symptoms = models.TextField(blank=True,null=True)
     suggest_shot = models.DateField(null=True, blank=True)

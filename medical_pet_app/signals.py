@@ -29,9 +29,26 @@ def createPetMedical(sender,instance,created,**kwargs):
                     Medical_pet.objects.create(pet=instance, name = (i['name']), dscription = (i['description']),symptoms =(i['symptoms']), shot_duration = i['duration_adult'] )
 
 
+
+@receiver(pre_save,sender=Medical_pet)
+def calc_duration(instance,**kwargs):
+    pet_age = instance.pet.age
+    if pet_age < 8:
+        instance.shot_duration = 8 - pet_age
+    if pet_age > 8 and pet_age < 12:
+        instance.shot_duration = 12 - pet_age
+    if pet_age > 12 and pet_age < 52:
+        instance.shot_duration = 52 - pet_age
+    if pet_age > 52:
+        with open(os.path.abspath(os.getcwd()) +'/static/assets/data/medical.json','r', encoding="utf8") as f:
+            data_file = json.load(f)
+            output_dict = [x for x in data_file['Vaccinations'] if x['name'] == instance.name]
+            instance.shot_duration = output_dict[0]['duration_adult']
+            
 @receiver(pre_save,sender=Medical_pet)
 def calc_date(instance, **kwargs):
     if instance.last_shot is not None:
       instance.next_shot = instance.last_shot + timedelta(weeks=instance.shot_duration)
     else: instance.next_shot = None
+
 
